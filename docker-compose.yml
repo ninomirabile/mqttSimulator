@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  # MQTT Broker (Mosquitto)
+  mqtt-broker:
+    image: eclipse-mosquitto:2.0
+    container_name: mqtt-simulator-broker
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./docker/mosquitto/config:/mosquitto/config
+      - ./docker/mosquitto/data:/mosquitto/data
+      - ./docker/mosquitto/log:/mosquitto/log
+    command: mosquitto -c /mosquitto/config/mosquitto.conf
+    restart: unless-stopped
+
+  # MQTT Simulator API
+  api:
+    build:
+      context: .
+      dockerfile: docker/api/Dockerfile
+    container_name: mqtt-simulator-api
+    ports:
+      - "8000:8000"
+    environment:
+      - MQTT_BROKER_HOST=mqtt-broker
+      - MQTT_BROKER_PORT=1883
+    depends_on:
+      - mqtt-broker
+    restart: unless-stopped
+    volumes:
+      - ./mqtt_simulator:/app/mqtt_simulator
+      - ./api:/app/api
+
+  # MQTT Simulator Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/frontend/Dockerfile
+    container_name: mqtt-simulator-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:8000/api
+    depends_on:
+      - api
+    restart: unless-stopped
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/package.json:/app/package.json
+
+  # MQTT Client (for testing)
+  mqtt-client:
+    image: eclipse-mosquitto:2.0
+    container_name: mqtt-simulator-client
+    depends_on:
+      - mqtt-broker
+    command: >
+      sh -c "
+        echo 'Waiting for MQTT broker...' &&
+        sleep 10 &&
+        mosquitto_sub -h mqtt-broker -t '#' -v
+      "
+    restart: "no"
+
+networks:
+  default:
+    name: mqtt-simulator-network 

@@ -92,18 +92,30 @@ export const simulationActions = {
 
     async testConnection() {
         connectionStatus.update(status => ({ ...status, isTesting: true, error: null }));
-        
         try {
             const config = get(mqttConfig);
-            const response = await apiClient.testMqttConnection(config);
-            
+            // Conversione camelCase -> snake_case per compatibilità backend
+            const apiConfig = {
+                host: config.host,
+                port: config.port,
+                username: config.username,
+                password: config.password,
+                keepalive: config.keepalive,
+                clean_session: config.cleanSession,
+                qos: config.qos,
+                retained: config.retained,
+                last_will_topic: config.lastWillTopic || null,
+                last_will_message: config.lastWillMessage || null,
+                last_will_qos: config.lastWillQos || 0
+            };
+            const response = await apiClient.testMqttConnection(apiConfig);
+            console.log("MQTT test response:", response);
             connectionStatus.update(status => ({
                 ...status,
                 isTesting: false,
                 isConnected: response.success,
                 error: response.success ? null : response.message
             }));
-            
             return response.success;
         } catch (error) {
             connectionStatus.update(status => ({

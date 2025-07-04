@@ -6,6 +6,7 @@ MQTT simulations.
 """
 
 from fastapi import APIRouter, HTTPException, Query
+import logging
 
 from ..models import (
     SimulationConfig,
@@ -20,6 +21,8 @@ router = APIRouter(prefix="/simulation", tags=["simulation"])
 
 @router.post("/start", response_model=APIResponse)
 async def start_simulation(config: SimulationConfig):
+    logger = logging.getLogger(__name__)
+    logger.info(f"Simulation start params: {config}")
     """Start a new MQTT simulation with the given configuration."""
     try:
         success = mqtt_service.start_simulation(config)

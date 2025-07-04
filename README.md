@@ -2,7 +2,9 @@
 
 # MQTT Simulator
 
-A comprehensive MQTT data simulation tool with a modern web interface. Simulate real-time data publishing via MQTT with configurable profiles for weather, agriculture, energy, and more.
+![MQTT Simulator Dashboard](./simulator_dashboard.png)
+
+Real-time data simulation with configurable profiles
 
 ## Features
 

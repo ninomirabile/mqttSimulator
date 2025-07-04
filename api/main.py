@@ -23,7 +23,7 @@ app = FastAPI(
     description="API for controlling MQTT data simulation with various profiles",
     version="1.0.0",
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
 )
 
 # Add CORS middleware
@@ -44,18 +44,20 @@ app.include_router(mqtt.router, prefix="/api")
 @app.get("/", response_model=APIResponse)
 async def root():
     """Root endpoint with API information."""
+    endpoints = {
+        "simulation": "/api/simulation",
+        "profiles": "/api/profiles",
+        "mqtt": "/api/mqtt",
+    }
+    data = {
+        "version": "1.0.0",
+        "docs": "/docs",
+        "endpoints": endpoints
+    }
     return APIResponse(
         success=True,
         message="MQTT Simulator API is running",
-        data={
-            "version": "1.0.0",
-            "docs": "/docs",
-            "endpoints": {
-                "simulation": "/api/simulation",
-                "profiles": "/api/profiles",
-                "mqtt": "/api/mqtt"
-            }
-        }
+        data=data
     )
 
 
@@ -63,9 +65,7 @@ async def root():
 async def health_check():
     """Health check endpoint."""
     return APIResponse(
-        success=True,
-        message="API is healthy",
-        data={"status": "ok"}
+        success=True, message="API is healthy", data={"status": "ok"}
     )
 
 
@@ -78,11 +78,12 @@ async def global_exception_handler(request, exc):
         content={
             "success": False,
             "error": "Internal server error",
-            "details": str(exc) if str(exc) else "Unknown error"
-        }
+            "details": str(exc) if str(exc) else "Unknown error",
+        },
     )
 
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000) 
+
+    uvicorn.run(app, host="0.0.0.0", port=8000)

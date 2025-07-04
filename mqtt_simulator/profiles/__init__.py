@@ -5,7 +5,7 @@ This module provides a registry of available simulation profiles and utilities
 for discovering and loading them dynamically.
 """
 
-from typing import Dict, Type, Any
+from typing import Dict, Type
 from .base import BaseProfile
 from .weather import WeatherProfile
 from .agriculture import AgricultureProfile
@@ -27,7 +27,10 @@ def get_available_profiles() -> Dict[str, Type[BaseProfile]]:
 def get_profile(profile_name: str) -> Type[BaseProfile]:
     """Get a specific profile by name."""
     if profile_name not in _PROFILES:
-        raise ValueError(f"Profile '{profile_name}' not found. Available: {list(_PROFILES.keys())}")
+        raise ValueError(
+            f"Profile '{profile_name}' not found. Available: "
+            f"{list(_PROFILES.keys())}"
+        )
     return _PROFILES[profile_name]
 
 
@@ -38,10 +41,10 @@ def register_profile(name: str, profile_class: Type[BaseProfile]) -> None:
 
 __all__ = [
     "BaseProfile",
-    "WeatherProfile", 
+    "WeatherProfile",
     "AgricultureProfile",
     "EnergyProfile",
     "get_available_profiles",
     "get_profile",
     "register_profile",
-] 
+]

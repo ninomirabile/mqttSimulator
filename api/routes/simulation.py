@@ -6,11 +6,12 @@ MQTT simulations.
 """
 
 from fastapi import APIRouter, HTTPException, Query
-from typing import Optional
 
 from ..models import (
-    SimulationConfig, SimulationStatus, SimulationData, 
-    APIResponse, ErrorResponse
+    SimulationConfig,
+    SimulationStatus,
+    SimulationData,
+    APIResponse,
 )
 from ..services.mqtt_service import mqtt_service
 
@@ -22,27 +23,32 @@ async def start_simulation(config: SimulationConfig):
     """Start a new MQTT simulation with the given configuration."""
     try:
         success = mqtt_service.start_simulation(config)
-        
+
         if success:
             return APIResponse(
                 success=True,
-                message=f"Simulation started successfully with profile: {config.profile.name}",
+                message=(
+                    f"Simulation started successfully with profile: "
+                    f"{config.profile.name}"
+                ),
                 data={
                     "profile": config.profile.name,
                     "topic": config.profile.topic or "auto-generated",
-                    "interval": config.interval
-                }
+                    "interval": config.interval,
+                },
             )
         else:
             raise HTTPException(
                 status_code=400,
-                detail="Failed to start simulation. Check MQTT connection and configuration."
+                detail=(
+                    "Failed to start simulation. Check MQTT connection "
+                    "and configuration."
+                ),
             )
-            
+
     except Exception as e:
         raise HTTPException(
-            status_code=500,
-            detail=f"Error starting simulation: {str(e)}"
+            status_code=500, detail=f"Error starting simulation: {str(e)}"
         )
 
 
@@ -51,22 +57,19 @@ async def stop_simulation():
     """Stop the currently running simulation."""
     try:
         success = mqtt_service.stop_simulation()
-        
+
         if success:
             return APIResponse(
-                success=True,
-                message="Simulation stopped successfully"
+                success=True, message="Simulation stopped successfully"
             )
         else:
             return APIResponse(
-                success=False,
-                message="No simulation is currently running"
+                success=False, message="No simulation is currently running"
             )
-            
+
     except Exception as e:
         raise HTTPException(
-            status_code=500,
-            detail=f"Error stopping simulation: {str(e)}"
+            status_code=500, detail=f"Error stopping simulation: {str(e)}"
         )
 
 
@@ -78,13 +81,15 @@ async def get_simulation_status():
     except Exception as e:
         raise HTTPException(
             status_code=500,
-            detail=f"Error getting simulation status: {str(e)}"
+            detail=f"Error getting simulation status: {str(e)}",
         )
 
 
 @router.get("/data", response_model=SimulationData)
 async def get_simulation_data(
-    limit: int = Query(default=50, ge=1, le=100, description="Number of messages to return")
+    limit: int = Query(
+        default=50, ge=1, le=100, description="Number of messages to return"
+    )
 ):
     """Get recent simulation data."""
     try:
@@ -92,6 +97,5 @@ async def get_simulation_data(
         return SimulationData(**data)
     except Exception as e:
         raise HTTPException(
-            status_code=500,
-            detail=f"Error getting simulation data: {str(e)}"
-        ) 
+            status_code=500, detail=f"Error getting simulation data: {str(e)}"
+        )

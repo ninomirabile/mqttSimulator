@@ -22,8 +22,7 @@ async def list_profiles():
         return ProfileList(profiles=profiles)
     except Exception as e:
         raise HTTPException(
-            status_code=500,
-            detail=f"Error getting profiles: {str(e)}"
+            status_code=500, detail=f"Error getting profiles: {str(e)}"
         )
 
 
@@ -32,50 +31,48 @@ async def get_profile_info(profile_name: str):
     """Get detailed information about a specific profile."""
     try:
         profile_info = mqtt_service.get_profile_info(profile_name)
-        
+
         if profile_info is None:
             raise HTTPException(
-                status_code=404,
-                detail=f"Profile '{profile_name}' not found"
+                status_code=404, detail=f"Profile '{profile_name}' not found"
             )
-        
+
         return profile_info
-        
+
     except HTTPException:
         raise
     except Exception as e:
         raise HTTPException(
-            status_code=500,
-            detail=f"Error getting profile info: {str(e)}"
+            status_code=500, detail=f"Error getting profile info: {str(e)}"
         )
 
 
 @router.post("/{profile_name}/preview", response_model=APIResponse)
-async def generate_profile_preview(profile_name: str, parameters: Dict[str, Any]):
+async def generate_profile_preview(
+    profile_name: str, parameters: Dict[str, Any]
+):
     """Generate a preview of data for a profile with given parameters."""
     try:
-        preview_data = mqtt_service.generate_profile_preview(profile_name, parameters)
-        
+        preview_data = mqtt_service.generate_profile_preview(
+            profile_name, parameters
+        )
+
         if preview_data is None:
             raise HTTPException(
                 status_code=400,
-                detail=f"Failed to generate preview for profile '{profile_name}'"
+                detail=f"Failed to generate preview for profile '{profile_name}'",
             )
-        
+
+        preview = {"preview": preview_data}
         return APIResponse(
             success=True,
-            message=f"Preview generated for profile: {profile_name}",
-            data={
-                "profile": profile_name,
-                "parameters": parameters,
-                "preview": preview_data
-            }
+            message="Profile preview generated",
+            data=preview
         )
-        
+
     except HTTPException:
         raise
     except Exception as e:
         raise HTTPException(
-            status_code=500,
-            detail=f"Error generating preview: {str(e)}"
-        ) 
+            status_code=500, detail=f"Error generating preview: {str(e)}"
+        )

@@ -5,7 +5,6 @@ This module provides FastAPI routes for testing MQTT broker connections.
 """
 
 from fastapi import APIRouter, HTTPException
-from typing import Optional
 
 from ..models import MQTTConfig, APIResponse
 from ..services.mqtt_service import mqtt_service
@@ -21,34 +20,39 @@ async def test_mqtt_connection(config: MQTTConfig):
             host=config.host,
             port=config.port,
             username=config.username,
-            password=config.password
+            password=config.password,
         )
-        
+
         if success:
             return APIResponse(
                 success=True,
-                message=f"Successfully connected to MQTT broker at {config.host}:{config.port}",
+                message=(
+                    f"Successfully connected to MQTT broker at "
+                    f"{config.host}:{config.port}"
+                ),
                 data={
                     "host": config.host,
                     "port": config.port,
-                    "connected": True
-                }
+                    "connected": True,
+                },
             )
         else:
             return APIResponse(
                 success=False,
-                message=f"Failed to connect to MQTT broker at {config.host}:{config.port}",
+                message=(
+                    f"Failed to connect to MQTT broker at "
+                    f"{config.host}:{config.port}"
+                ),
                 data={
                     "host": config.host,
                     "port": config.port,
-                    "connected": False
-                }
+                    "connected": False,
+                },
             )
-            
+
     except Exception as e:
         raise HTTPException(
-            status_code=500,
-            detail=f"Error testing MQTT connection: {str(e)}"
+            status_code=500, detail=f"Error testing MQTT connection: {str(e)}"
         )
 
 
@@ -57,7 +61,7 @@ async def get_mqtt_status():
     """Get the current MQTT connection status."""
     try:
         status = mqtt_service.get_simulation_status()
-        
+
         return APIResponse(
             success=True,
             message="MQTT connection status retrieved",
@@ -65,12 +69,11 @@ async def get_mqtt_status():
                 "is_connected": status.is_connected,
                 "is_running": status.is_running,
                 "profile_name": status.profile_name,
-                "topic": status.topic
-            }
+                "topic": status.topic,
+            },
         )
-        
+
     except Exception as e:
         raise HTTPException(
-            status_code=500,
-            detail=f"Error getting MQTT status: {str(e)}"
-        ) 
+            status_code=500, detail=f"Error getting MQTT status: {str(e)}"
+        )

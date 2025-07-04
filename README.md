@@ -2,7 +2,7 @@
 
 # MQTT Simulator
 
-![MQTT Simulator Dashboard](./simulator_dashboard.png)
+![MQTT Simulator Dashboard](./docs/simulator_dashboard.png)
 
 Real-time data simulation with configurable profiles
 

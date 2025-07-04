@@ -39,6 +39,11 @@ jobs:
           cd frontend
           npm install
 
+      - name: Sync Svelte Kit
+        run: |
+          cd frontend
+          npx svelte-kit sync
+
       - name: Run frontend checks
         run: |
           cd frontend

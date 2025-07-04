@@ -39,10 +39,22 @@ jobs:
           cd frontend
           npm install
 
+      - name: Debug frontend files
+        run: |
+          cd frontend
+          echo "=== Checking frontend structure ==="
+          ls -la src/
+          ls -la src/lib/
+          ls -la src/lib/stores/
+          echo "=== Checking if simulation.js exists ==="
+          cat src/lib/stores/simulation.js | head -5
+
       - name: Sync Svelte Kit
         run: |
           cd frontend
           npx svelte-kit sync
+          echo "=== After sync ==="
+          ls -la src/lib/stores/
 
       - name: Run frontend checks
         run: |

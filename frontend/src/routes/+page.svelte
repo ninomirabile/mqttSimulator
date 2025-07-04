@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
 	import { onMount } from 'svelte';
 	import { 
 		simulationStatus, 
@@ -20,14 +20,14 @@
 	import ConfigSummary from '$lib/components/ConfigSummary.svelte';
 
 	let loading = true;
-	let error: string | null = null;
+	let error = null;
 
 	onMount(async () => {
 		try {
 			await simulationActions.updateStatus();
 			await simulationActions.loadSimulationData();
 		} catch (err) {
-			error = (err as Error).message;
+			error = err.message;
 		} finally {
 			loading = false;
 		}

@@ -35,7 +35,7 @@ Real-time data simulation with configurable profiles
 
 ## Screenshot
 
-![Dashboard Screenshot](docs/dashboard_screenshot.png)
+![Dashboard Screenshot](docs/Screenshot_4.png)
 
 ## Architecture
 

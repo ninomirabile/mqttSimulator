@@ -18,9 +18,20 @@ Thank you for your interest in contributing to MQTT Simulator! This document pro
    cd mqtt-simulator
    ```
 
-2. **Install dependencies**
+2. **Start development environment (Recommended)**
    ```bash
-   # Python dependencies
+   # Make the script executable (first time only)
+   chmod +x start.sh
+   
+   # Start the entire development stack
+   ./start.sh
+   ```
+   
+   This will install all dependencies and start both API and frontend servers.
+
+3. **Alternative: Manual setup**
+   ```bash
+   # Install dependencies
    pip install -r requirements.txt
    pip install -r requirements-api.txt
    
@@ -28,10 +39,7 @@ Thank you for your interest in contributing to MQTT Simulator! This document pro
    cd frontend
    npm install
    cd ..
-   ```
-
-3. **Start development servers**
-   ```bash
+   
    # Start API (in one terminal)
    python3 -m uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
    
@@ -44,6 +52,9 @@ Thank you for your interest in contributing to MQTT Simulator! This document pro
    ```bash
    # Python tests
    pytest
+   
+   # Integration tests
+   python3 test_integration.py
    
    # Frontend tests
    cd frontend

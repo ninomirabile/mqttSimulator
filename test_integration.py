@@ -2,6 +2,25 @@
 """
 Integration Test for MQTT Simulator
 Tests the complete system including API and frontend connectivity.
+
+This script performs end-to-end testing of the MQTT Simulator:
+- API health check
+- Profiles endpoint functionality
+- Simulation status monitoring
+- MQTT connection testing
+- Profile preview generation
+- Frontend accessibility
+
+Usage:
+    python3 test_integration.py
+
+Prerequisites:
+    - API server running on http://localhost:8000
+    - Frontend server running on http://localhost:5173 (optional)
+    - MQTT broker running on localhost:1883 (optional)
+
+The test will provide detailed feedback on each component's status
+and overall system health.
 """
 
 import requests

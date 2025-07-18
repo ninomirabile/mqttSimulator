@@ -18,12 +18,11 @@ def read_requirements():
 setup(
     name="mqtt-simulator",
     version="0.1.0",
-    author="MQTT Simulator Contributors",
-    author_email="contributors@mqtt-simulator.com",
+    author="Antonino Mirabile",
     description="A Python microservice/library for simulating real-time data publishing via MQTT",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/mqtt-simulator",
+    url="https://github.com/ninomirabile/mqttSimulator",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 3 - Alpha",
@@ -59,8 +58,8 @@ setup(
     },
     keywords="mqtt iot simulator weather agriculture energy real-time data",
     project_urls={
-        "Bug Reports": "https://github.com/yourusername/mqtt-simulator/issues",
-        "Source": "https://github.com/yourusername/mqtt-simulator",
-        "Documentation": "https://github.com/yourusername/mqtt-simulator#readme",
+        "Bug Reports": "https://github.com/ninomirabile/mqttSimulator/issues",
+        "Source": "https://github.com/ninomirabile/mqttSimulator",
+        "Documentation": "https://github.com/ninomirabile/mqttSimulator#readme",
     },
 ) 

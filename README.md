@@ -1,4 +1,14 @@
 [![CI](https://github.com/ninomirabile/mqttSimulator/actions/workflows/ci.yml/badge.svg)](https://github.com/ninomirabile/mqttSimulator/actions/workflows/ci.yml)
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![Node.js 16+](https://img.shields.io/badge/node.js-16+-green.svg)](https://nodejs.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green.svg)](https://fastapi.tiangolo.com/)
+[![Svelte](https://img.shields.io/badge/Svelte-4.0+-orange.svg)](https://svelte.dev/)
+[![MQTT](https://img.shields.io/badge/MQTT-3.1.1-red.svg)](http://mqtt.org/)
+[![Project Status](https://img.shields.io/badge/status-active-success.svg)](https://github.com/ninomirabile/mqttSimulator)
+[![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)](https://github.com/ninomirabile/mqttSimulator/actions/workflows/ci.yml)
+[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/ninomirabile/mqttSimulator/releases)
+
 
 # MQTT Simulator
 
@@ -47,9 +57,61 @@ mqtt-simulator/
 └── tests/                   # Test suite
 ```
 
+## Prerequisites
+
+Before getting started, make sure you have:
+
+- **Python 3.10+** - For the backend API and core library
+- **Node.js 16+** - For the frontend development
+- **Git** - For cloning the repository
+- **MQTT Broker** (optional) - For testing MQTT functionality
+  - Local: Mosquitto, HiveMQ, etc.
+  - Cloud: AWS IoT, Azure IoT Hub, etc.
+  - Public: test.mosquitto.org (pre-configured in the interface)
+
 ## Quick Start
 
-### 1. Install Dependencies
+### Option 1: Using the Startup Script (Recommended)
+
+The easiest way to get started is using the provided startup script:
+
+```bash
+# Make the script executable (first time only)
+chmod +x start.sh
+
+# Start the entire stack
+./start.sh
+```
+
+This script will:
+- Install all Python and Node.js dependencies
+- Start the API server on port 8000
+- Start the frontend development server on port 5173
+- Provide status updates and URLs
+- Handle cleanup when you press Ctrl+C
+
+### Option 2: Using Docker Compose
+
+If you prefer using Docker, you can use the provided docker-compose configuration:
+
+```bash
+# Start all services including MQTT broker
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop all services
+docker-compose down
+```
+
+**Note:** The Docker setup includes a Mosquitto MQTT broker, so you don't need to install one separately.
+
+### Option 3: Manual Setup
+
+If you prefer to set up manually:
+
+#### 1. Install Dependencies
 
 ```bash
 # Install Python dependencies
@@ -62,7 +124,7 @@ npm install
 cd ..
 ```
 
-### 2. Start the Backend API
+#### 2. Start the Backend API
 
 ```bash
 python3 -m uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
@@ -70,7 +132,7 @@ python3 -m uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
 
 The API will be available at `http://localhost:8000` with interactive docs at `http://localhost:8000/docs`.
 
-### 3. Start the Frontend
+#### 3. Start the Frontend
 
 ```bash
 cd frontend
@@ -79,7 +141,7 @@ npm run dev
 
 The web interface will be available at `http://localhost:5173`.
 
-### 4. Use the Web Interface
+#### 4. Use the Web Interface
 
 1. Open `http://localhost:5173` in your browser
 2. Select a profile (weather, agriculture, energy)
@@ -223,6 +285,61 @@ Simulates energy meter data for smart grid applications.
 
 ## Development
 
+### Development Setup
+
+#### Option 1: Using start.sh (Recommended)
+```bash
+# Start development environment
+./start.sh
+```
+
+#### Option 2: Using Docker Compose
+```bash
+# Start development environment with Docker
+docker-compose up -d
+
+# View logs
+docker-compose logs -f api
+docker-compose logs -f frontend
+```
+
+#### Option 3: Manual Setup
+```bash
+# Install dependencies
+pip install -r requirements.txt
+pip install -r requirements-api.txt
+cd frontend && npm install && cd ..
+
+# Start API (terminal 1)
+python3 -m uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
+
+# Start frontend (terminal 2)
+cd frontend && npm run dev
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+pytest
+
+# Run specific test file
+pytest tests/test_profiles.py
+
+# Run with coverage
+pytest --cov=mqtt_simulator
+
+# Run integration tests
+python3 test_integration.py
+```
+
+### Building Frontend
+
+```bash
+cd frontend
+npm run build
+```
+
 ### Adding New Profiles
 
 1. Create a new module in `mqtt_simulator/profiles/` (e.g., `traffic.py`)
@@ -261,26 +378,6 @@ class TrafficSimulator:
         return f"traffic/{self.sensor_id}"
 ```
 
-### Running Tests
-
-```bash
-# Run all tests
-pytest
-
-# Run specific test file
-pytest tests/test_profiles.py
-
-# Run with coverage
-pytest --cov=mqtt_simulator
-```
-
-### Building Frontend
-
-```bash
-cd frontend
-npm run build
-```
-
 ## Contributing
 
 1. Fork the repository
@@ -297,6 +394,7 @@ This project is licensed under the Creative Commons Attribution-NonCommercial 4.
 
 - **Issues**: Report bugs and feature requests on GitHub
 - **Documentation**: Check the API docs at `http://localhost:8000/docs`
+- **Project Status**: See [docs/PROJECT_STATUS.md](docs/PROJECT_STATUS.md) for detailed project overview
 - **Examples**: See the `examples/` directory for usage examples
 
 ## Web Interface

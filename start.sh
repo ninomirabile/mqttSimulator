@@ -2,6 +2,37 @@
 
 # MQTT Simulator Startup Script
 # This script starts the entire MQTT Simulator stack
+#
+# Features:
+# - Automatic dependency installation (Python + Node.js)
+# - Health checks for prerequisites
+# - Service startup with status monitoring
+# - Graceful shutdown handling
+# - Color-coded output for better UX
+# - Port availability checking
+# - Service readiness waiting
+#
+# Usage:
+#     ./start.sh
+#
+# Prerequisites:
+#     - Python 3.10+
+#     - Node.js 16+
+#     - Git
+#
+# The script will:
+# 1. Check prerequisites
+# 2. Install Python dependencies
+# 3. Install frontend dependencies
+# 4. Start API server (port 8000)
+# 5. Start frontend server (port 5173)
+# 6. Provide status and URLs
+# 7. Handle cleanup on Ctrl+C
+#
+# Services started:
+# - API: http://localhost:8000
+# - Frontend: http://localhost:5173
+# - API Docs: http://localhost:8000/docs
 
 set -e
 
